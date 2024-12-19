@@ -1,0 +1,28 @@
+[
+    {
+      "id": "name",
+      "label": "Name",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "email",
+      "label": "Email",
+      "type": "email",
+      "required": true
+    },
+    {
+      "id": "age",
+      "label": "Age",
+      "type": "number",
+      "required": false
+    },
+    {
+      "id": "country",
+      "label": "Country",
+      "type": "select",
+      "options": ["USA", "India", "Canada"],
+      "required": true
+    }
+  ]
+  
