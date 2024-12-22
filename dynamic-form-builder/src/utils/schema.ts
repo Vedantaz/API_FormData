@@ -17,6 +17,15 @@ export const createSchema = (fields: FormConfig) => {
           schema[field.id] = z.string().email('Invalid email address');
         }
     
+        if(field.type === 'password' ){
+          schema[field.id] = z.string().min(8, 'Password must be at least 8 characters long')
+          .regex(/[A-Z]/, 'Password must contain an uppercase letter')
+          .regex(/\d/, 'Password must contain a number')
+          .regex(/[@$!%*?&#]/, 'Password must contain a special character')
+        }
+        if(field.type === 'confirmPassword'){
+          schema[field.id] = z.string().nonempty('Please confirm your password');
+        }
         if (field.type === 'number') {
           schema[field.id] = z.number()
           .or(z.string().transform((val) => (val === '' ? undefined : Number(val))))
@@ -25,5 +34,9 @@ export const createSchema = (fields: FormConfig) => {
         }
       });
 
-    return z.object(schema);
+    return z.object(schema)
+    .refine((data) => data.password === data.confirmPassword, {
+      message : 'Passwords do not match',
+      path: ['confirmPassword'],
+    });
 }

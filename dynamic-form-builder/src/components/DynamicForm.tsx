@@ -3,95 +3,70 @@ import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createSchema } from '../utils/schema';
+import { fetchFormConfig, submitFormData } from '../services/api'
 import { FormConfig } from '../types/formTypes';
-import { fetchFormConfig, submitFormData } from '../services/api';
-
-const formConfig: FormConfig = [
-    { id: 'name', label: 'Name', type: 'text', required: true },
-    { id: 'email', label: 'Email', type: 'email', required: true },
-    { id: 'age', label: 'Age', type: 'number', required: false },
-    { id: 'country', label: 'Country', type: 'select', options: ['USA', 'India'], required: true },
-];
-
-const schema = createSchema(formConfig);
+import RenderInputs from './molecules/RenderInputs';
 
 const DynamicForm: React.FC<{ onSubmitData: (data: any) => void }> = ({ onSubmitData }) => {
 
-    const [formConfig, setFormConfig] = useState<any[]>([]);
+    const [formConfig, setFormConfig] = useState<FormConfig>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [schema, setSchema] = useState<any>(null);
 
+    type FormData = Record<string, any>;
 
-    const {
-        register, handleSubmit, setValue, formState: { errors }, } = useForm({
-            resolver: zodResolver(schema),
+    const loadFormConfig = async() =>{
+        try{
+            const config = await fetchFormConfig();
+            setFormConfig(config);
+            setSchema(createSchema(config));
+            setLoading(false);
+        }catch(err:any){
+            setError(err.message || 'Failed to load form configuration');
+            setLoading(false);
+        }
+    }
+
+    // preload saved data from localStorage
+    const preloadSavedData = () => {
+        const savedData = localStorage.getItem('formData');
+        return savedData ? JSON.parse(savedData) : {};
+    };  
+
+    const { handleSubmit, formState: { errors }, reset } = 
+        useForm<FormData>({
+            resolver: schema ? zodResolver(schema) : undefined,
+            // defaultValues:  preloadSavedData(),
+            defaultValues:  {},  
         });
 
-
     useEffect(() => {
-        const loadFormConfig = async () => {
-            try {
-                const config = await fetchFormConfig();
-                setFormConfig(config);
-                setSchema(createSchema(config)); // Generate schema dynamically
-            } catch (err: any) {
-                setError(err.message || 'Failed to load form configuration');
-            } finally {
-                setLoading(false);
-            }
-        };
+
         loadFormConfig();
-
-
+        
+        reset({});
         // retrieiving the data and pre-populate the form
-        const savedData = localStorage.getItem('formData');
-        if (savedData) {
-            const parsedData = JSON.parse(savedData);
+        // const savedData = preloadSavedData();
 
+        // Object.keys(savedData).forEach((key)=>{
+        //     setValue(key, savedData[key]);
+        // });
 
-            setValue('name', parsedData.name);
-            setValue('age', parsedData.age);
-            setValue('name', parsedData.name);
-            setValue('country', parsedData.country);
-
-            Object.keys(parsedData).forEach((key) => {
-                setValue(key, parsedData[key]);
-            });
-        }
-    }, [setValue]);
+    }, [reset]);
 
     const onSubmit: SubmitHandler<any> = async (data) => {
         try {
             const res = await submitFormData(data);
             alert(res.message);
-            localStorage.setItem('formdata', JSON.stringify(data));
+            localStorage.setItem('formData', JSON.stringify(data));
+            localStorage.removeItem('formData');
+            reset({});
             onSubmitData(data);
-            const savedData = localStorage.getItem('formData');
-            if (savedData) {
-                const parsedData = JSON.parse(savedData);
-                try {
-                    const response = await fetch('http://localhost:4000/api/saveFormData', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(parsedData),
-                    });
 
-                    if (!response.ok) {
-                        throw new Error('Failed to send data');
-                    }
-
-                    console.log('Data sent successfully');
-                } catch (error) {
-                    console.error('Error sending data to server:', error);
-                }
-            }
         } catch (err: any) {
             alert(err.message || 'Failed to submit the form');
         }
-
     };
 
     if (loading) return <p>Loading form...</p>;
@@ -99,14 +74,15 @@ const DynamicForm: React.FC<{ onSubmitData: (data: any) => void }> = ({ onSubmit
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            {formConfig.map((field: any) => (
+            {formConfig?.map((field: any) => (
                 <div key={field.id} style={{ marginBottom: '1rem' }}>
                     <label>
                         {field.label}
                         {field.required && '*'}
                     </label>
-                    {field.type === 'select' ? (
-                        <select {...register(field.id)}>
+                    <RenderInputs key={field.id} field={field}/>
+                    {/* {field.type === 'select' ? (
+                        <select {...register(field.id)} defaultValue="">
                             <option value="">Select</option>
                             {field.options?.map((option: any) => (
                                 <option key={option} value={option}>
@@ -115,8 +91,8 @@ const DynamicForm: React.FC<{ onSubmitData: (data: any) => void }> = ({ onSubmit
                             ))}
                         </select>
                     ) : (
-                        <input type={field.type} {...register(field.id)} />
-                    )}
+                        <input type={field.type} {...register(field.id)} defaultValue="" />
+                    )} */}
                     {errors[field.id] &&
                         <p style={{ color: 'red' }}>
                             {errors[field.id]?.message as string}</p>}

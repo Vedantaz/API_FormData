@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 // import viteLogo from '/vite.svg'
 import './App.css'
 
-import FormDisplay from './components/FormDisplay';
+import FormDisplay from './components/molecules/FormDisplay';
 import DynamicForm from './components/DynamicForm';
 
 

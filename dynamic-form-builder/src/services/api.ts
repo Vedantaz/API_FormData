@@ -1,5 +1,8 @@
 export const fetchFormConfig = async () => {
-    const response = await fetch('http://localhost:4000/api/forms/config');
+    const response = await fetch('http://localhost:4000/api/forms/config', {
+      method: 'GET',
+      
+    });
     if (!response.ok) throw new Error('Failed to fetch form configuration');
     return response.json();
   };
