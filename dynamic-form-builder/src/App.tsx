@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
 import './App.css'
-
-import FormDisplay from './components/molecules/FormDisplay';
 import DynamicForm from './components/DynamicForm';
+import FormDisplay from './components/molecules/FormDisplay';
 
 
 const App: React.FC = () => {

@@ -1,30 +1,21 @@
-import { FormConfig, FormField } from "../../../types/formTypes";
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from "react";
+
 import { UseFormRegister } from 'react-hook-form';
 
-type FormData = Record<string, any>;
+import { FormField } from '../../../types/formTypes';
+
 
 type RenderInputProps = {
     field: FormField;
+    register : UseFormRegister<Record<string, any>>;
+    error?: string
 };
 
-
-const RenderInputs: React.FC<RenderInputProps> = ({ field }) => {
-    const [schema, setSchema] = useState<any>(null);
-
-    const {
-        register, handleSubmit, formState: { errors }, reset } =
-        useForm<FormData>({
-            resolver: schema ? zodResolver(schema) : undefined,
-            // defaultValues:  preloadSavedData(),
-            defaultValues: {},
-        });
-
+const RenderInputs: React.FC<RenderInputProps> = ({ field, register }) => {
 
     const commonProps = {
-        ...register(field.id as keyof FormData),
+        ...register(field.id, {
+            required: field.required ?`${field.label} is required` : false,
+        }),
         defaultValue: "",
     }
     switch (field.type) {

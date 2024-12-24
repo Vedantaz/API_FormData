@@ -1,12 +1,11 @@
 import * as  z from 'zod';
-import { FormConfig } from '../types/formTypes';
-
+import { FormConfig, FormField } from '../types/formTypes';
 
 export const createSchema = (fields: FormConfig) => {
-    
     const schema: Record<string, z.ZodTypeAny> = {};
 
-    fields.forEach((field:any) => {
+    fields.forEach((field:FormField) => {
+
         if (field.required) {
           schema[field.id] = z.string().nonempty(`${field.label} is required`);
         } else {
@@ -14,8 +13,9 @@ export const createSchema = (fields: FormConfig) => {
         }
     
         if (field.type === 'email') {
-          schema[field.id] = z.string().email('Invalid email address');
-        }
+          const emailSchema = schema[field.id] as z.ZodString;
+          schema[field.id] = emailSchema.email('Invalid email address');
+      }
     
         if(field.type === 'password' ){
           schema[field.id] = z.string().min(8, 'Password must be at least 8 characters long')
