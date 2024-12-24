@@ -1,63 +1,49 @@
+import React from 'react';
+import { Field, ErrorMessage } from 'formik';
 
-import { UseFormRegister } from 'react-hook-form';
+interface RenderInputsProps {
+    field: {
+        id: string;
+        type: string;
+        label: string;
+        required?: boolean;
+        options?: Array<{ value: string; label: string }>; 
+    };
+    error?: string;
+}
 
-import { FormField } from '../../../types/formTypes';
+const RenderInputs: React.FC<RenderInputsProps> = ({ field }) => {
+    const { id, type, label, options } = field;
 
-
-type RenderInputProps = {
-    field: FormField;
-    register : UseFormRegister<Record<string, any>>;
-    error?: string
-};
-
-const RenderInputs: React.FC<RenderInputProps> = ({ field, register }) => {
-
-    const commonProps = {
-        ...register(field.id, {
-            required: field.required ?`${field.label} is required` : false,
-        }),
-        defaultValue: "",
-    }
-    switch (field.type) {
-        case "select":
-            return (
-                <select {...commonProps}>
-                    <option value="">Select</option>
-                    {field.options?.map((option) => (
-                        <option key={option} value={option}>
+    return (
+        <div>
+            {type === 'select' && Array.isArray(field.options) ? (
+                <Field name={id} as="select">
+                    <option value="">Select {field.label}</option>
+                    {options?.map((option) => (
+                        typeof option === 'string' ? (
+                            <option key={option} value={option}>
                             {option}
                         </option>
+                        ) : (
+                            <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                        )
+                        
                     ))}
-                </select>
-            );
-        case "number":
-            return <input type="number" {...commonProps} />;
-        case "password":
-            return <input type="password" {...commonProps} />;
-        case "textarea":
-            return <textarea {...commonProps} />;
-        case "checkbox":
-            return (
-                <input
-                    type="checkbox"
-                    {...commonProps}
-                    value="checked"
-                    defaultChecked={false}
+                </Field>
+            ) : (
+                <Field
+                    name={id}
+                    as={type === 'textarea' ? 'textarea' : 'input'}
+                    type={type !== 'textarea'  ? field.type : undefined}
+                    placeholder={label}
                 />
-            );
-        case "radio":
-            return (
-                <div>
-                    {field.options?.map((option) => (
-                        <label key={option}>
-                            <input type="radio" value={option} {...commonProps} />
-                            {option}
-                        </label>
-                    ))}
-                </div>
-            );
-        default:
-            return <input type={field.type} {...commonProps} />;
-    }
-}
+            )}
+            <ErrorMessage name={id} component="p"  />
+        </div>
+    );
+};
+
 export default RenderInputs;
