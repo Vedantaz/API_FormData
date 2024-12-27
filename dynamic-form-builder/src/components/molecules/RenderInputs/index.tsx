@@ -30,7 +30,22 @@ const RenderInputs: React.FC<RenderInputsProps> = ({ field }) => {
                             {option.label}
                         </option>
                         )
-                        
+                    ))}
+                </Field>
+            ) : (type === 'gender') ? (
+                // gender dropdown
+                <Field name={id} as="select"> 
+                    <option value="">Select Gender</option>
+                    {options?.map((option) => (
+                        typeof option === 'string' ? (
+                            <option key={option} value={option}>
+                            {option}
+                        </option>
+                        ) : (
+                            <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                        )
                     ))}
                 </Field>
             ) : (
@@ -41,7 +56,7 @@ const RenderInputs: React.FC<RenderInputsProps> = ({ field }) => {
                     placeholder={label}
                 />
             )}
-            <ErrorMessage name={id} component="p"  />
+            <ErrorMessage name={id} component="p" />
         </div>
     );
 };

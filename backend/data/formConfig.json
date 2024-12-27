@@ -18,10 +18,29 @@
       "required": false
     },
     {
+      "id": "dob",
+      "label": "DOB",
+      "type": "number",
+      "required": true
+    },
+    {
+      "id": "gender",
+      "label": "Gender",
+      "type": "text",
+      "options": ["male", "female"],
+      "required": true
+    },
+    {
+      "id": "number",
+      "label": "Number",
+      "type": "tel",
+      "required": false
+    },
+    {
       "id": "country",
       "label": "Country",
       "type": "select",
-      "options": ["USA", "India", "Canada"],
+      "options": ["USA", "India", "Canada", "Prag", "Austalia", "Peru"],
       "required": true
     }
   ]

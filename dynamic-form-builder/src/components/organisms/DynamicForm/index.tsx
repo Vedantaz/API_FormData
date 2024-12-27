@@ -1,39 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Formik, Form, FormikHelpers } from 'formik';
-import RenderInputs from './molecules/RenderInputs';
-import { FormConfig, FormField } from '../types/formTypes';
-import { fetchFormConfig, submitFormData } from '../services/api';
-import { createSchema } from '../utils/schema';
+import RenderInputs from '../../molecules/RenderInputs';
+import { FormConfig, FormField } from '../../../types/formTypes';
+import { fetchFormConfig, submitFormData } from '../../../services/api';
+import { createSchema } from '../../../utils/schema';
+import { useQuery } from '@tanstack/react-query';
+import './styles.css'
 
 type FormData = Record<string, string | number | boolean>;
 
-const DynamicForm: React.FC<{ onSubmitData: (data: FormField) => void }> = ({ onSubmitData }) => {
-    const [formConfig, setFormConfig] = useState<FormConfig>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [validationSchema, setValidationSchema] = useState<any>(null);
+type DynamicFormProps = {
+    onSubmitData: (data: FormData) => void; // Prop to pass data to parent
+  };
 
-    const loadFormConfig = async () => {
-        try {
-            const config = await fetchFormConfig();
-            setFormConfig(config);
-            const schema = createSchema(config); 
-            setValidationSchema(schema);
-            setLoading(false);
-        } catch (err: any) {
-            setError(err.message || 'Failed to load form configuration');
-            setLoading(false);
+const useFormConfig = () => {
+    return useQuery<FormConfig, Error>(
+        {
+            queryKey: ['formConfig'],
+            queryFn: fetchFormConfig,
+            staleTime: 300000,
+            retry: 2,
         }
-    };
 
-    useEffect(() => {
-        loadFormConfig();
-    }, []);
+    )
+}
 
-    const initialValues: FormData = formConfig.reduce((acc, field) => {
+const getInitialValues = (formConfig: FormConfig): FormData =>
+    formConfig.reduce((acc, field) => {
         acc[field.id] = field.type === 'checkbox' ? false : '';
         return acc;
     }, {} as FormData);
+
+
+const DynamicForm: React.FC<DynamicFormProps> = ({onSubmitData}) => {
+
+    const { data: formConfig, isLoading, isError, error } = useFormConfig();
+
+    if (isLoading) return <p>Loading form...</p>;
+    if (isError || !formConfig) return <p style={{ color: 'red' }}>{error?.message}</p>;
+
+    const validationSchema = createSchema(formConfig);
+    const initialValues = getInitialValues(formConfig);   // always validate before initializing it 
 
     const handleSubmit = async (
         values: FormData,
@@ -43,26 +50,24 @@ const DynamicForm: React.FC<{ onSubmitData: (data: FormField) => void }> = ({ on
             const res = await submitFormData(values);
             alert(res.message);
             localStorage.setItem('formData', JSON.stringify(values));
+            onSubmitData(values);
             resetForm();
         } catch (err: any) {
             alert(err.message || 'Failed to submit the form');
-        } finally {
+        } finally { 
             setSubmitting(false);
         }
     };
-
-    if (loading || !validationSchema) return <p>Loading form...</p>;
-    if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
     return (
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-        >
+            onSubmit={handleSubmit}>
+
             {({ isSubmitting }) => (
                 <Form>
-                    {formConfig.map((field : FormField) => (
+                    {formConfig.map((field: FormField) => (
                         <div key={field.id} style={{ marginBottom: '1rem' }}>
                             <label>
                                 {field.label}
@@ -78,6 +83,7 @@ const DynamicForm: React.FC<{ onSubmitData: (data: FormField) => void }> = ({ on
             )}
         </Formik>
     );
+
 };
 
 export default DynamicForm;
