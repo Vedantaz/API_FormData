@@ -20,20 +20,20 @@
     {
       "id": "dob",
       "label": "DOB",
-      "type": "number",
+      "type": "date",
       "required": true
     },
     {
       "id": "gender",
       "label": "Gender",
-      "type": "text",
-      "options": ["male", "female"],
+      "type": "select",
+      "options": ["male", "female", "Transgender"],
       "required": true
     },
     {
       "id": "number",
       "label": "Number",
-      "type": "tel",
+      "type": "number",
       "required": false
     },
     {

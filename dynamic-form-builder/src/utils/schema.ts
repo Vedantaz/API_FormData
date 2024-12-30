@@ -31,18 +31,29 @@ export const createSchema = (fields: FormConfig) => {
                 schema[field.id] = Yup.number()
                     .typeError(`${field.label} must be a valid number`)
                     .optional();
+
                     if (field.id === 'age') {
-                        // Explicitly cast to Yup.NumberSchema to access min()
+                        
                         schema[field.id] = (schema[field.id] as Yup.NumberSchema)
                             .min(18, `${field.label} must be greater than or equal to 18`);
+                    }
+                    else if (field.id === 'number') {
+                        schema[field.id] = (schema[field.id] as Yup.NumberSchema).test(
+                            'is-10-digits',
+                            `${field.label} must be exactly 10 digits`,
+                            (value) => {
+                                if (value === undefined || value === null) return true; 
+                                const stringValue = value?.toString(); 
+                                return /^\d{10}$/.test(stringValue || ''); 
+                            }
+                        );
                     }
                 break;
             
             case 'date':
                     schema[field.id] = Yup.date().nullable().required(`${field.label} is required`);
                     break;
-                    
-
+                
 
             default:
                 schema[field.id] = field.required   

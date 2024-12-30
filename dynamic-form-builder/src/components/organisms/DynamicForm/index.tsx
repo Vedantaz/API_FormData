@@ -66,17 +66,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({onSubmitData}) => {
             onSubmit={handleSubmit}>
 
             {({ isSubmitting }) => (
-                <Form>
+                <Form>  
                     {formConfig.map((field: FormField) => (
-                        <div key={field.id} style={{ marginBottom: '1rem' }}>
-                            <label>
-                                {field.label}
-                                {field.required && '*'}
-                            </label>
+                        <div key={field.id} style={{    display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center"}}>
+
                             <RenderInputs field={field} />
                         </div>
                     ))}
-                    <button type="submit" disabled={isSubmitting}>
+                    <button className='btn' type="submit" disabled={isSubmitting}>
                         {isSubmitting ? 'Submitting...' : 'Submit'}
                     </button>
                 </Form>
