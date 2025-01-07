@@ -17,10 +17,8 @@ interface RenderInputsProps {
     error?: string;
 }
 
-
 const RenderInputs: React.FC<RenderInputsProps> = ({ field }) => {
-    const { id, type, label, options, category } = field;
-
+    const { id, type, label, options } = field;
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs} >

@@ -42,5 +42,34 @@ router.post('/api/saveFormData', (req, res) => {
 
 router.get('/api/forms/config', (req, res) => {
     res.json(formConfig);
-  });
+});
+
+const VALID_EMAIL = 'abc@gmail.com';
+const VALID_PASSWORD = 'Ved@123';
+//login endpoint
+router.post('/login', (req, res) => {
+    const {email, password} = req.body;
+
+    if(!email || !password){
+        return res.status(400).json({success:  false, message : 'Email and password are required'});
+    };
+
+    if(email === VALID_EMAIL && password === VALID_PASSWORD){
+        return res.json({
+            success:true,
+            message:'Login successful',
+            token:'fake-jwt-token',
+            user: {email}
+        })
+    } else {
+        return res.status(401).json({
+            success: false,
+            message: 'Invalid email or password',
+        });
+    }
+
+});
+
 module.exports = router;
+
+
