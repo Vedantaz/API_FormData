@@ -5,6 +5,7 @@ export type FormField = {
     // options?: string[];     // used for useForm Logic
     options?:  { value: string; label: string }[];     // using for formik logic
     required: boolean;
+    category:string;
 }
 
 export type FormConfig = FormField[];

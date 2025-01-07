@@ -10,7 +10,7 @@ import './styles.css'
 type FormData = Record<string, string | number | boolean>;
 
 type DynamicFormProps = {
-    onSubmitData: (data: FormData) => void; // Prop to pass data to parent
+    onSubmitData: (data: FormData) => void;
   };
 
 const useFormConfig = () => {
@@ -31,11 +31,9 @@ const getInitialValues = (formConfig: FormConfig): FormData =>
         return acc;
     }, {} as FormData);
 
-
 const DynamicForm: React.FC<DynamicFormProps> = ({onSubmitData}) => {
 
     const { data: formConfig, isLoading, isError, error } = useFormConfig();
-
     if (isLoading) return <p>Loading form...</p>;
     if (isError || !formConfig) return <p style={{ color: 'red' }}>{error?.message}</p>;
 
@@ -82,7 +80,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({onSubmitData}) => {
             )}
         </Formik>
     );
-
 };
 
 export default DynamicForm;

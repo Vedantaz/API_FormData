@@ -3,24 +3,28 @@
       "id": "name",
       "label": "Name",
       "type": "text",
+      "category": "personal",
       "required": true
     },
     {
       "id": "email",
       "label": "Email",
       "type": "email",
+      "category": "personal",
       "required": true
     },
     {
       "id": "age",
       "label": "Age",
       "type": "number",
+      "category": "personal",
       "required": false
     },
     {
       "id": "dob",
       "label": "DOB",
       "type": "date",
+      "category": "personal",
       "required": true
     },
     {
@@ -28,19 +32,37 @@
       "label": "Gender",
       "type": "select",
       "options": ["male", "female", "Transgender"],
+      "category": "personal",
       "required": true
     },
     {
       "id": "number",
       "label": "Number",
       "type": "number",
+      "category": "personal",
       "required": false
+    },
+    {
+      "id": "role",
+      "label": "Role",
+      "type": "text",
+      "category": "professional",
+      "required": true
+    },
+    {
+      "id": "domain",
+      "label": "Domain",
+      "type": "select",
+      "options": ["frontend", "backend", "database", "python", "Dot-Net"],
+      "category": "professional",
+      "required": true
     },
     {
       "id": "country",
       "label": "Country",
       "type": "select",
-      "options": ["USA", "India", "Canada", "Prag", "Austalia", "Peru"],
+      "options": ["USA", "India", "Canada", "Peru", "Australia"],
+      "category": "personal",
       "required": true
     }
   ]
