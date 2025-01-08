@@ -48,6 +48,26 @@ export const createSchema = (fields: FormConfig) => {
                             }
                         );
                     }
+                    else if(field.id === 'sleep_hours'){
+                        schema[field.id] = (schema[field.id] as Yup.NumberSchema).test(
+                            'is greater than 5.5 hrs',
+                            `${field.label} must be greater than 5.5 hours`,
+                            (value) => {
+                                if (value === undefined || value === null) return true; 
+                                return value > 5.5; 
+                            }
+                        )
+                    }
+                    else if(field.id === 'water_intake'){
+                        schema[field.id] = (schema[field.id] as Yup.NumberSchema).test(
+                            'is greater than 4 litres',
+                            `${field.label} must be greater than 4 litres`,
+                            (value) => {
+                                if (value === undefined || value === null) return true; 
+                                return value >= 4; 
+                            }
+                        )
+                    }
                 break;
             
             case 'date':

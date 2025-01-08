@@ -24,6 +24,54 @@
       "required": true
     },
     {
+      "id": "height",
+      "label": "Height",
+      "type": "number",
+      "required": true
+    },
+    {
+      "id": "weight",
+      "label": "Weight",
+      "type": "number",
+      "required": true
+    },
+    {
+      "id": "goals",
+      "label": "Goals",
+      "type": "select",
+      "options": ["Weight loss", "Muscle gain", "flexibility", "Endurance"],
+      "required": true
+    },
+    {
+      "id": "activity",
+      "label": "Activity",
+      "type": "select",
+      "options": ["Light", "Moderate", "Extreme", "Sedentary"],
+      "required": true
+    },
+    {
+      "id": "preference",
+      "label": "Preference",
+      "type": "select",
+      "options": ["Gym", "Home", "Outdoor", "Yoga", "Cardio"],
+      "required": true
+    },
+    {
+      "id": "workout_time",
+      "label": "Workout_Time",
+      "type": "select",
+      "options": ["Morning", "Noon", "Evening", "Night"],
+      "required": true
+    },
+    {
+      "id": "diet",
+      "label": "Diet",
+      "type": "select",
+      "options": ["Veg", "Non-veg", "Vegan"],
+      "required": true
+    },
+
+    {
       "id": "gender",
       "label": "Gender",
       "type": "select",
@@ -31,32 +79,23 @@
       "required": true
     },
     {
+      "id": "sleep_hours",
+      "label": "Sleep_hours",
+      "type": "number",
+      "required": true
+    },
+    {
+      "id": "water_intake",
+      "label": "Water_intake",
+      "type": "number",
+      "required": true
+    },
+    {
       "id": "number",
-      "label": "Number",
+      "label": "Phone Number",
       "type": "number",
       "required": false
-    },
-    {
-      "id": "role",
-      "label": "Role",
-      "type": "text",
-      
-      "required": true
-    },
-    {
-      "id": "domain",
-      "label": "Domain",
-      "type": "select",
-      "options": ["frontend", "backend", "database", "python", "Dot-Net"],
-      
-      "required": true
-    },
-    {
-      "id": "country",
-      "label": "Country",
-      "type": "select",
-      "options": ["USA", "India", "Canada", "Peru", "Australia"],
-      "required": true
     }
+    
   ]
   
