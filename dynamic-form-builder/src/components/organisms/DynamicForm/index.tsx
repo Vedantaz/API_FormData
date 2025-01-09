@@ -6,12 +6,13 @@ import { fetchFormConfig, submitFormData } from '../../../services/api';
 import { createSchema } from '../../../utils/schema';
 import { useQuery } from '@tanstack/react-query';
 import './styles.css'
+import BMI from '../../molecules/BMI';
 
 type FormData = Record<string, string | number | boolean>;
 
 type DynamicFormProps = {
     onSubmitData: (data: FormData) => void;
-  };
+};
 
 const useFormConfig = () => {
     return useQuery<FormConfig, Error>(
@@ -31,54 +32,79 @@ const getInitialValues = (formConfig: FormConfig): FormData =>
         return acc;
     }, {} as FormData);
 
-const DynamicForm: React.FC<DynamicFormProps> = ({onSubmitData}) => {
+const DynamicForm: React.FC<DynamicFormProps> = ({ onSubmitData }) => {
 
     const { data: formConfig, isLoading, isError, error } = useFormConfig();
+
+    const [bmiInputs, setBmiInputs] = React.useState<{ height: string; weight: string }>({
+        height: '',
+        weight: '',
+    });
+    const [isSubmitted, setIsSubmitted] = React.useState(false);
+
     if (isLoading) return <p>Loading form...</p>;
     if (isError || !formConfig) return <p style={{ color: 'red' }}>{error?.message}</p>;
 
     const validationSchema = createSchema(formConfig);
     const initialValues = getInitialValues(formConfig);   // always validate before initializing it 
 
+
     const handleSubmit = async (
         values: FormData,
         { setSubmitting, resetForm }: FormikHelpers<FormData>
     ) => {
         try {
+            
+
             const res = await submitFormData(values);
             alert(res.message);
             localStorage.setItem('formData', JSON.stringify(values));
             onSubmitData(values);
+            setBmiInputs({
+                height: values['height'] as string,
+                weight: values['weight'] as string,
+            });
+
+            setIsSubmitted(true);
             resetForm();
         } catch (err: any) {
             alert(err.message || 'Failed to submit the form');
-        } finally { 
+        } finally {
             setSubmitting(false);
         }
     };
 
     return (
-        <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}>
+        <>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}>
 
-            {({ isSubmitting }) => (
-                <Form>  
-                    {formConfig.map((field: FormField) => (
-                        <div key={field.id} style={{    display: "flex",
+                {({ isSubmitting }) => (
+                    <Form>
+                        {formConfig.map((field: FormField) => (
+                            <div key={field.id} style={{
+                                display: "flex",
                                 flexDirection: "column",
-                                alignItems: "center"}}>
+                                alignItems: "center"
+                            }}>
 
-                            <RenderInputs field={field} />
-                        </div>
-                    ))}
-                    <button className='btn' type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Submitting...' : 'Submit'}
-                    </button>
-                </Form>
-            )}
-        </Formik>
+                                <RenderInputs field={field} />
+                            </div>
+                        ))}
+                        <button className='btn' type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
+                        </button>
+                       
+                    </Form>
+                )}
+            </Formik>
+            {isSubmitted && bmiInputs.height && bmiInputs.weight  && (
+                             <BMI  height={bmiInputs.height} weight={bmiInputs.weight}  />
+                        )}
+
+        </>
     );
 };
 

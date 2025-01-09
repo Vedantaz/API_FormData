@@ -1,38 +1,48 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Typography } from '@mui/material';
+import './styles.css'
 
-const BMI = ({ ht, wt }: { ht: string, wt: string }) => {
+type BMIProps = {
+    height: string;
+    weight: string;
 
-    const [bmi, setBmi] = useState<number | null>(null);
-    const [category, setCategory] = useState<string>('');
+}
 
+const BMI: React.FC<BMIProps> = ({ height, weight }) => {
 
-    //calculate BMI when ht and wt changes
-    React.useEffect(() => {
-        if (ht && wt) {
-            const heightInMeters = parseFloat(ht) / 100; // Convert cm to meters
-            const bmiValue = parseFloat(wt) / (heightInMeters ** 2);
-            setBmi(bmiValue);
+    if (!height || !weight || isNaN(parseFloat(height)) || isNaN(parseFloat(weight))) {
+        alert('Please provide valid height and weight values.');
+        return;
+    }
+    const heightInMeters = Number(height) / 100;
+    const bmiValue = Number(weight) / (heightInMeters ** 2);
 
-            // Determine BMI category
-            if (bmiValue < 18.5) setCategory('Underweight');
-            else if (bmiValue >= 18.5 && bmiValue < 24.9) setCategory('Normal weight');
-            else if (bmiValue >= 25 && bmiValue < 29.9) setCategory('Overweight');
-            else setCategory('Obese');
-        }
-    }, [ht, wt]);
+    let category = '';
+    if (bmiValue < 18.5) category = 'Underweight';
+    else if (bmiValue >= 18.5 && bmiValue < 24.9) category = 'Normal weight';
+    else if (bmiValue >= 25 && bmiValue < 29.9) category = 'Overweight';
+    else category = 'Obese';
 
     return (
-        
-        <div>
-            {bmi !== null && (
-                <div style={{ marginTop: '20px' }}>
-                    <Typography variant="h6">Your BMI: {bmi.toFixed(2)}</Typography>
-                    <Typography variant="subtitle1">Category: {category}</Typography>
-                </div>
-            )}
+        <div className='container'
+        >
+            <div className='result-card'
+            >
+                <Typography className="bmi-value"
+                    variant="h4"
+                >
+                    Your BMI: {bmiValue.toFixed(2)}
+                </Typography>
+                <Typography
+                    className="category"
+                    variant="h6"
+                >
+                    Category: {category}
+                </Typography>
+            </div>
         </div>
+
     );
 
 
