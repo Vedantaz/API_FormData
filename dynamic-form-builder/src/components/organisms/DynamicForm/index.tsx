@@ -48,14 +48,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ onSubmitData }) => {
     const validationSchema = createSchema(formConfig);
     const initialValues = getInitialValues(formConfig);   // always validate before initializing it 
 
-
     const handleSubmit = async (
         values: FormData,
         { setSubmitting, resetForm }: FormikHelpers<FormData>
     ) => {
         try {
             
-
             const res = await submitFormData(values);
             alert(res.message);
             localStorage.setItem('formData', JSON.stringify(values));
@@ -102,8 +100,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ onSubmitData }) => {
             </Formik>
             {isSubmitted && bmiInputs.height && bmiInputs.weight  && (
                              <BMI  height={bmiInputs.height} weight={bmiInputs.weight}  />
-                        )}
-
+            )}
         </>
     );
 };
