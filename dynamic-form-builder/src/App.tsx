@@ -7,8 +7,9 @@ import FormDisplay from './components/molecules/FormDisplay';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './components/molecules/Login';
-import SuggestionBox from './components/organisms/Suggestions';
+import SuggestionBox from './components/organisms/Nutritions';
 import Navbar from './components/organisms/Navbar';
+import NutritionFood from './components/organisms/Nutritions';
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
@@ -34,9 +35,8 @@ const App: React.FC = () => {
 
               </ProtectedRoute>
             } />
-            <Route path='/suggestions' element={<SuggestionBox water_intake={'6'} sleep_hours={'6'}/>}>
+            {/* <Route path='/suggestions' element={<SuggestionBox water_intake={'6'} sleep_hours={'6'}/>}> */}
 
-            </Route>
             <Route path="/formata" element={
               <ProtectedRoute>
                 {formData ? <FormDisplay formData={formData} /> : <Navigate to="/form" replace />}

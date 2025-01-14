@@ -11,7 +11,7 @@ const Navbar = () => {
         <Link to="/form-data" className='a'>Form Data</Link>
       </button>
       <button className='button'>
-        <Link to="/suggestions" className='a'>Suggestions</Link>
+        <Link to="/nutritions" className='a'>Nutrients in Food</Link>
       </button>
     </nav>
   );
