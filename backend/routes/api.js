@@ -1,6 +1,7 @@
-import express, { Request, Response } from 'express';
+// import express, { Request, Response } from 'express';
+import express from 'express';
+import dotenv from 'dotenv';
 const router = express.Router();
-const dotenv  = require('dotenv');
 const formConfig = require('../data/formConfig.json');
 
 const API_KEY = process.env.API_KEY;

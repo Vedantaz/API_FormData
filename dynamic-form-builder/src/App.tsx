@@ -7,9 +7,9 @@ import FormDisplay from './components/molecules/FormDisplay';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './components/molecules/Login';
-import SuggestionBox from './components/organisms/Nutritions';
+// import SuggestionBox from './components/organisms/Nutritions';
 import Navbar from './components/organisms/Navbar';
-import NutritionFood from './components/organisms/Nutritions';
+// import NutritionFood from './components/organisms/Nutritions';
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
@@ -25,7 +25,6 @@ const App: React.FC = () => {
         <Navbar />
         <div style={{ padding: '2rem' }}>
           <h1>Dynamic Form Builder</h1>
-
           <Routes>
 
             <Route path="/login" element={<Login />} />

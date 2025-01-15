@@ -1,6 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
+import express from 'express';
+import cors from 'cors';
+// const cors = require('cors');
+import dotenv from 'dotenv';
 const apiRoutes = require('./routes/api')
 
 const app = express();
