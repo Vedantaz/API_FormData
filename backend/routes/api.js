@@ -1,10 +1,26 @@
 // import express, { Request, Response } from 'express';
+import { readFile } from 'fs/promises';
 import express from 'express';
-import dotenv from 'dotenv';
 const router = express.Router();
-const formConfig = require('../data/formConfig.json');
-
 const API_KEY = process.env.API_KEY;
+
+import axios from 'axios';
+import path from 'path';
+
+let formConfig;
+const loadConfig = async () => {
+  try {
+    const filePath = path.resolve('./data/formConfig.json');
+    const data = await readFile(filePath, 'utf-8');
+    formConfig = JSON.parse(data); // Assign globally
+    console.log('Global Form Config:', formConfig);
+  } catch (err) {
+    console.error('Error reading JSON file:', err);
+  }
+};
+
+await loadConfig();
+
 
 router.post('/api/validateForm', async (req, res) => {
     const formData = req.body;
@@ -116,9 +132,6 @@ router.post('/login', (req, res) => {
 //     });
 // });
 
-import axios from 'axios';
-
-
 router.get('/nutrition', async (req, res) => {
   const { query } = req.query;
 
@@ -162,8 +175,5 @@ router.get('/nutrition', async (req, res) => {
 });
 
 export default router;
-
-
-module.exports = router;
 
 
