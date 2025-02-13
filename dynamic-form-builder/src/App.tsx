@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './components/molecules/Login';
 // import SuggestionBox from './components/organisms/Nutritions';
 import Navbar from './components/organisms/Navbar';
+import HomePage from './pages/HomePage';
 // import NutritionFood from './components/organisms/Nutritions';
 const queryClient = new QueryClient();
 
@@ -24,7 +25,7 @@ const App: React.FC = () => {
       <Router>
         <Navbar />
         <div style={{ padding: '2rem' }}>
-          <h1>Dynamic Form Builder</h1>
+          <h1>Forms</h1>
           <Routes>
 
             <Route path="/login" element={<Login />} />
@@ -34,14 +35,14 @@ const App: React.FC = () => {
 
               </ProtectedRoute>
             } />
-            {/* <Route path='/suggestions' element={<SuggestionBox water_intake={'6'} sleep_hours={'6'}/>}> */}
 
-            <Route path="/formata" element={
+            <Route path="/form-data" element={
               <ProtectedRoute>
                 {formData ? <FormDisplay formData={formData} /> : <Navigate to="/form" replace />}
               </ProtectedRoute>
             } />
             <Route path="*" element={<Navigate to="/login" replace />} />
+            <Route path="/HomePage" element={<HomePage/>} />
 
           </Routes>
 

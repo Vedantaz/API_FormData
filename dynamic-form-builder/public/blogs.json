@@ -1,0 +1,35 @@
+{
+    "blogs": [
+      {
+        "id": 1,
+        "title": "Understanding React Hooks",
+        "author": "Vedant",
+        "date": "2025-01-15",
+        "category": "React",
+        "tags": ["React", "Hooks", "Frontend"],
+        "content": "React Hooks have revolutionized the way developers manage state and side effects in React applications, making the process more intuitive, efficient, and maintainable. Introduced in React 16.8, hooks allow developers to use state and other React features without writing class components, thereby simplifying the codebase and enhancing readability. State Management Made Easy.",
+        "summary": "An overview of React Hooks and their usage.",
+        "likes": 120,
+        "comments": [
+          {
+            "user": "JohnDoe",
+            "comment": "Very helpful article!",
+            "date": "2025-01-14"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "JavaScript ES6 Features",
+        "author": "Vedant",
+        "date": "2025-01-10",
+        "category": "JavaScript",
+        "tags": ["JavaScript", "ES6"],
+        "content": "ECMAScript 6 (ES6) brought significant features that revolutionized JavaScript, making it more powerful, concise, and easier to work with. Released in 2015, ES6 introduced modern syntax and capabilities that improved both the readability and maintainability of code, making it a milestone in the evolution of JavaScript.",
+        "summary": "Learn about ES6 features in JavaScript.",
+        "likes": 85,
+        "comments": []
+      }
+    ]
+  }
+  
